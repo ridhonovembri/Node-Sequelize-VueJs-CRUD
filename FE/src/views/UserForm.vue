@@ -40,7 +40,7 @@
           color="primary"
           flat
           class="q-ml-sm"
-          :to="{ name: 'user' }"
+          :to="{ name: 'users' }"
         />
       </div>
     </q-form>
@@ -127,7 +127,7 @@ export default {
 
       // console.log("status", status);
 
-      this.$router.push({ name: "user" });
+      this.$router.push({ name: "users" });
     },
     onReset() {
       this.user.UserId = null;

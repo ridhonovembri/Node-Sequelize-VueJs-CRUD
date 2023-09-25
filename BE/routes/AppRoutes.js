@@ -9,10 +9,13 @@ route.post('/api/user/post', userController.post)
 route.put('/api/user/update/:id', userController.update);
 route.delete('/api/user/delete/:id', userController.delete);
 
-route.get('/api/role/findAll', roleController.findAll)
+route.get('/api/roles', roleController.findAll)
+route.get('/api/roleById/:id', roleController.findByPk)
+route.get('/api/role/post', roleController.post)
+route.get('/api/role/update/:id', roleController.update)
+route.get('/api/role/delete/:id', roleController.delete)
 
-// route.post('/api/user/post', userController.create)
-// route.put('/api/user/update/:id', userController.update);
+
 
 
 module.exports = route;

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import UserView from '@/views/UserView.vue'
 import UserForm from '@/views/UserForm.vue'
+import RoleView from '@/views/RoleView.vue'
 
 const routes = [
   {
@@ -10,15 +11,20 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/user',
-    name: 'user',
+    path: '/users',
+    name: 'users',
     component: UserView
   },
   {
     path: '/user-form/:id?',
     name: 'userForm',
     component: UserForm
-  }
+  },
+  {
+    path: '/roles',
+    name: 'roles',
+    component: RoleView
+  },
 
 ]
 

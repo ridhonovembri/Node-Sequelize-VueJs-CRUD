@@ -14,6 +14,15 @@ class Get {
     // console.log(id)
     return http.get(`/userById/${ id }`);
   }
+
+  roles(){
+    return http.get('/roles')
+  }
+
+  roleById(id) {
+    // console.log(id)
+    return http.get(`/roleById/${ id }`);
+  }
 }
 
 export default new Get();
