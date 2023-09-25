@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "M_SYS",
+    "password": "Msdev_123567890abc",
+    "database": "SPMD03",
+    "port": "1560",
+    "host": "daltor37",
+    "dialect": "oracle",
+    "logging" : true
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "oracle"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "oracle"
+  }
+}
