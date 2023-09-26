@@ -1,12 +1,13 @@
 const db = require("../models");
 
 exports.findAll = async () => {
+  console.log('employee service')
   try {
-    const result = await db.users.findAll({
+    const result = await db.employees.findAll({
       // orderBy: [["NamaClient","ASC"]]
     });
 
-    console.log('result', result)
+    // console.log('result', result)
 
     return result;
   } catch (e) {
@@ -16,7 +17,7 @@ exports.findAll = async () => {
 
 exports.findByPk = async (id) => {
   try {
-    const result = await db.users.findByPk(id);
+    const result = await db.employees.findByPk(id);
 
     return result;
   } catch (e) {
@@ -26,7 +27,7 @@ exports.findByPk = async (id) => {
 
 exports.create = async (data) => {
   try {
-    const result = await db.users.create(data);
+    const result = await db.employees.create(data);
     return result;
   } catch (e) {
     throw e;
@@ -39,7 +40,7 @@ exports.update = async (id, data) => {
   // console.log('BE: data service', data)
 
   try {
-    const result = await db.users.update(data, {
+    const result = await db.employees.update(data, {
       where: { Id: id },
     });
   } catch (e) {
@@ -50,7 +51,7 @@ exports.update = async (id, data) => {
 exports.delete = async (id) => {
 //   console.log("destroy==>", id);
   try {
-    const result = await db.users.destroy({
+    const result = await db.employees.destroy({
       where: { Id: id },
     });
     return result;

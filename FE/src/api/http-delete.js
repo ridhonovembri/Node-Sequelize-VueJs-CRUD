@@ -10,6 +10,11 @@ class Delete {
     // console.log('id==>', id)
     return http.delete(`/role/delete/${id}`);
   }
+
+  employees(id) {
+    // console.log('id==>', id)
+    return http.delete(`/employee/delete/${id}`);
+  }
 }
 
 export default new Delete();

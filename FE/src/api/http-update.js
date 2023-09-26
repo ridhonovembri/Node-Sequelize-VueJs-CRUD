@@ -10,6 +10,12 @@ class Update {
     // console.log('data', data)
     return http.put(`/role/update/${id}`, data);
   }
+
+  employees(id, data) {
+    // console.log('id', id)
+    // console.log('data', data)
+    return http.put(`/employee/update/${id}`, data);
+  }
 }
 
 export default new Update();

@@ -23,6 +23,15 @@ class Get {
     // console.log(id)
     return http.get(`/roleById/${ id }`);
   }
+
+  employees(){
+    return http.get('/employees')
+  }
+
+  employeeById(id) {
+    // console.log(id)
+    return http.get(`/employeeById/${ id }`);
+  }
 }
 
 export default new Get();

@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import UserView from '@/views/UserView.vue'
 import UserForm from '@/views/UserForm.vue'
 import RoleView from '@/views/RoleView.vue'
+import EmployeeView from '@/views/EmployeeView.vue'
 
 const routes = [
   {
@@ -25,6 +26,12 @@ const routes = [
     name: 'roles',
     component: RoleView
   },
+  {
+    path: '/employees',
+    name: 'employees',
+    component: EmployeeView
+  },
+  
 
 ]
 

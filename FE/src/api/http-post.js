@@ -10,6 +10,11 @@ class Post {
     return http.post("/role/post", data);
   }
 
+  employees(data) {
+    // console.log('data', data)
+    return http.post("/employee/post", data);
+  }
+
 }
 
 export default new Post();

@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      title="Role List"
+      title="Employees List"
       :rows="rows"
       :columns="columns"
       row-key="Id"
@@ -12,6 +12,9 @@
       :rows-per-page-options="[0]"
       :filter="filter"
       :separator="separator"
+      selection="single"
+      v-model:selected="selected"
+      :selected-rows-label="getSelectedRow"
     >
       <!-- to configure header table-->
       <template #header-cell="props">
@@ -20,30 +23,9 @@
         </q-th>
       </template>
 
-      <template #body-cell="props">
+      <template #body-cell-EmployeeName="props">
         <q-td :props="props" dense>
-          {{ props.value }}
-        </q-td>
-      </template>
-
-      <template #body-cell-actions="props">
-        <q-td :props="props">
-          <q-btn icon="more_vert" round flat color="blue-8" dense>
-            <q-menu auto-close>
-              <q-list dense>
-                <q-item clickable @click="deleteRow(props)">
-                  <q-item-section>
-                    <q-icon name="delete" />
-                  </q-item-section>
-                </q-item>
-                <q-item clickable @click="editRow(props)">
-                  <q-item-section>
-                    <q-icon name="edit" />
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+          <a href="#" @click="editRow(props)">{{ props.value }}</a>
         </q-td>
       </template>
 
@@ -53,7 +35,7 @@
           style="margin: 3px"
           icon="add"
           dense
-          @click="addRow"
+          @click="showForm"
           class="bg-primary glossy text-white"
         />
         <q-btn
@@ -78,6 +60,7 @@
       </template>
     </q-table>
 
+
     <q-dialog v-model="show_form">
       <q-card style="width: 600px; max-width: 60vw">
         <q-card-section>
@@ -90,7 +73,7 @@
             color="grey-8"
             v-close-popup
           ></q-btn>
-          <div class="text-h6">Update Item</div>
+          <div class="text-h6">Add Row</div>
         </q-card-section>
         <q-separator inset></q-separator>
         <q-card-section class="q-pt-none">
@@ -98,14 +81,14 @@
             <q-list>
               <q-item>
                 <q-item-section>
-                  <q-item-label class="q-pb-xs">Role Name</q-item-label>
-                  <q-input dense outlined v-model="role.RoleName" />
+                  <q-item-label class="q-pb-xs">Employee Name</q-item-label>
+                  <q-input dense outlined v-model="employee.EmployeeName" />
                 </q-item-section>
               </q-item>
               <q-item>
                 <q-item-section>
-                  <q-item-label class="q-pb-xs">Role Desc</q-item-label>
-                  <q-input dense outlined v-model="role.RoleDesc" />
+                  <q-item-label class="q-pb-xs">Address</q-item-label>
+                  <q-input dense outlined v-model="employee.Address" />
                 </q-item-section>
               </q-item>
             </q-list>
@@ -133,89 +116,110 @@
       </q-card>
     </q-dialog>
 
-    <!-- <div class="q-mt-md">Selected: {{ JSON.stringify(selected) }}</div> -->
+    <q-dialog v-model="show_dialog">
+      <q-card style="width: 600px; max-width: 30vw">
+        <q-separator inset></q-separator>
+        <q-card-section class="q-pt-none">
+          <q-form class="q-gutter-md">
+            <q-list>
+              <q-item>
+                <q-item-section> Do you want to delete Record? </q-item-section>
+              </q-item>
+            </q-list>
+          </q-form>
+        </q-card-section>
+        <q-card-section>
+          <q-card-actions align="right">
+            <q-btn
+              flat
+              label="Cancel"
+              color="warning"
+              dense
+              v-close-popup
+            ></q-btn>
+            <q-btn
+              flat
+              label="OK"
+              color="primary"
+              dense
+              v-close-popup
+              @click="deleteRow"
+            ></q-btn>
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
 import Get from "@/api/http-get";
-import Update from "@/api/http-update";
+import Post from '@/api/http-post'
+import Update from '@/api/http-update'
 import Delete from "@/api/http-delete";
-import Post from "@/api/http-post";
 import { Notify, exportFile } from "quasar";
 
 export default {
   data() {
     return {
       columns: [
-        // {
-        //   name: "Id",
-        //   label: "ID",
-        //   field: "Id",
-        //   align: "left",
-        // },
         {
-          name: "RoleName",
-          label: "Role Name",
-          field: "RoleName",
+          name: "EmployeeName",
+          label: "Employee Name",
+          field: "EmployeeName",
           align: "left",
           sortable: true,
         },
         {
-          name: "RoleDesc",
-          label: "Role Desc",
-          field: "RoleDesc",
+          name: "Address",
+          label: "Address",
+          field: "Address",
           align: "left",
-        },
-        {
-          name: "actions",
-          align: "left",
-          label: "Actions",
         },
       ],
+      employee : {
+        Id: '',
+        EmployeeName: '',
+        Address: '',
+      },
       rows: [],
       filter: "",
       separator: "cell",
-      show_form: false,
-      role: {
-        Id: "",
-        RoleName: "",
-        RoleDesc: "",
-      },
+      selected: [],
+      show_dialog: false,
+      show_form: false
     };
   },
+
   async mounted() {
     this.getRow();
   },
+
   methods: {
+    getSelectedRow() {
+      this.show_dialog = true;
+      this.employee.Id = this.selected[0].Id
+    },
+
     async getRow() {
-      this.rows = (await Get.roles()).data;
+      this.rows = (await Get.employees()).data;
     },
 
     editRow(props) {
-      //   console.log("props", props.row.Id);
-      //   console.log("props", props.row.RoleName);
-      //   console.log("props", props.row.RoleDesc);
       if (props) {
-        this.role.Id = props.row.Id;
-        this.role.RoleName = props.row.RoleName;
-        this.role.RoleDesc = props.row.RoleDesc;
+        this.employee.Id = props.row.Id;
+        this.employee.EmployeeName = props.row.EmployeeName;
+        this.employee.Address = props.row.Address;
       }
 
       this.show_form = true;
     },
 
-    addRow() {
-      this.role.Id = "";
-      this.role.RoleName = "";
-      this.role.RoleDesc = "";
-      this.show_form = true;
-    },
-
-    async deleteRow(props) {
+    async deleteRow() {
       // console.log('delete', props.row.Id)
-      const id = props.row.Id;
+      const id = this.employee.Id;
+
       // const index = this.rows.indexOf(id);
-      await Delete.roles(id).then((res) => {
+      await Delete.employees(id).then((res) => {
         let status = res.data.status;
         let message = res.data.message;
         if (status) {
@@ -224,22 +228,24 @@ export default {
             color: "blue-8",
             textColor: "white",
             icon: "cloud_done",
-          });
-          // this.rows.splice(index, 1);
-          // this.rows = Get.roles().data;
+          });      
         }
+        
       });
+      
       await this.getRow();
+      this.show_dialog = false
     },
 
     async updateRow() {
       // console.log("update row");
-      let id = this.role.Id;
+      let id = this.employee.Id;
       // console.log("id", id);
       // console.log('role', this.role)
 
       if (id > 0) {
-        await Update.roles(id, this.role).then((res) => {
+        // console.log('this.employee', this.employee)
+        await Update.employees(id, this.employee).then((res) => {
           // console.log('res', res)
           // console.log('status', res.data.status)
           // console.log('message', res.data.message)
@@ -260,11 +266,13 @@ export default {
       } else {
         let data = {
           // Id: this.role.Id,
-          RoleName: this.role.RoleName,
-          RoleDesc: this.role.RoleDesc,
+          EmployeeName: this.employee.EmployeeName,
+          Address: this.employee.Address,
         };
 
-        await Post.roles(data).then((res) => {
+        // console.log('data', data)
+
+        await Post.employees(data).then((res) => {
           const status = res.data.status;
           const message = res.data.message;
           // console.log("after update", status);
@@ -281,6 +289,17 @@ export default {
       }
 
       await this.getRow();
+      this.show_dialog = false
+    },
+
+
+    showForm() {
+      // console.log("add");
+      // this.$router.push({ name: "employeeForm" });
+      this.employee.Id = "";
+      this.employee.EmployeeName = "";
+      this.employee.Address = "";
+      this.show_form = true;
     },
 
     wrapCsvValue(val, formatFn, row) {
