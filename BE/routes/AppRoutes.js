@@ -11,9 +11,9 @@ route.delete('/api/user/delete/:id', userController.delete);
 
 route.get('/api/roles', roleController.findAll)
 route.get('/api/roleById/:id', roleController.findByPk)
-route.get('/api/role/post', roleController.post)
-route.get('/api/role/update/:id', roleController.update)
-route.get('/api/role/delete/:id', roleController.delete)
+route.post('/api/role/post', roleController.post)
+route.put('/api/role/update/:id', roleController.update)
+route.delete('/api/role/delete/:id', roleController.delete)
 
 
 
